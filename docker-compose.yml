@@ -11,6 +11,9 @@ services:
     ports:
         - "4545:80"
         - "4646:443"
+    environment:
+        - MODBUSSOURCE=10.24.204.112
+        - MODBUSPORT=502
 
   power-monitor-worker:
     image: ${DOCKER_REGISTRY-}powermonitorworker

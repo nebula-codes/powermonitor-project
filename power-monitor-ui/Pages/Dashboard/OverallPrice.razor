@@ -1,0 +1,21 @@
+﻿@using power_monitor_ui.Data
+
+
+<MudPaper Class="d-flex align-center justify-center mud-width-full py-4" Elevation="3" Style="background-color:orange;">
+
+	<h1 style="color:white;">Overall Cost: @Cost $</h1>
+
+</MudPaper>
+
+
+@code {
+
+	[Parameter]
+	public float Cost { get; set; }
+
+
+	//protected override async Task OnInitializedAsync()
+		//{
+
+		//}
+}

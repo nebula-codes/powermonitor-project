@@ -1,0 +1,49 @@
+﻿@page "/"
+@using EasyModbus
+@using power_monitor_ui.Data
+<PageTitle>@totalPrice $</PageTitle>
+
+<br />
+
+
+<MudGrid>
+	<MudItem xs="6">
+		<OverallUsage Usage=@total></OverallUsage>
+	</MudItem>
+	<MudItem xs="6">
+		<OverallPrice Cost=@totalPrice></OverallPrice>
+	</MudItem>
+</MudGrid>
+
+
+@code {
+
+	int port;
+
+	int modbusvalue;
+	float total;
+	float totalPrice;
+
+	protected override async Task OnInitializedAsync()
+	{
+		ModbusFetcher fetcher = new ModbusFetcher(Environment.GetEnvironmentVariable("MODBUSSOURCE"), Int32.Parse(Environment.GetEnvironmentVariable("MODBUSPORT")));
+
+
+		var timer = new System.Threading.Timer((_) =>
+		{
+			InvokeAsync(async () =>
+				{
+					// Add your update logic here
+					modbusvalue = await fetcher.getModBusInfoSize4(3204);
+
+					total = (float)(modbusvalue) / 1000;
+					totalPrice = total * 0.11f;
+
+					// Update the UI
+					StateHasChanged();
+				});
+		}, null, 0, 1000);
+
+
+	}
+}

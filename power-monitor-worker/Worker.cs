@@ -17,25 +17,30 @@ namespace power_monitor_worker
             {
                 string content;
                 _logger.LogInformation("Worker running at: {time} \n", DateTimeOffset.Now);
-                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://power-monitor-ui:80/");
 
-
-                //using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                //using (Stream stream = response.GetResponseStream())
-                //using (StreamReader reader = new StreamReader(stream))
-                //{
-                //    content = reader.ReadToEnd();
-                //}
-
-                using (var handler = new HttpClientHandler())
+                var request = new HttpRequestMessage(HttpMethod.Get, "https://power-monitor-ui/");
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
                 {
-                    // allow the bad certificate
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-                    using (var httpClient = new HttpClient(handler))
-                    {
-                        content = await httpClient.GetAsync("http://power-monitor-ui/").Result.Content.ReadAsStringAsync();
-                    }
+                    return true;
+                };
+
+                var client = new HttpClient(httpClientHandler) { BaseAddress = new Uri("https://power-monitor-ui/") };
+
+                try
+                {
+                    var res = await client.SendAsync(request);
+
+                    content = await res.Content.ReadAsStringAsync();
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogInformation(ex.Message);
+                    content = null;
+                }
+
+
+
 
                 _logger.LogInformation(content);
                 await Task.Delay(1000, stoppingToken);

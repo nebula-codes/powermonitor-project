@@ -1,0 +1,21 @@
+﻿@using power_monitor_ui.Data
+
+
+<MudPaper Class="d-flex align-center justify-center mud-width-full py-4" Elevation="3" Style="background-color:green;">
+
+	<h1 style="color:white;">Overall Usage: @Usage KWh</h1>
+
+</MudPaper>
+
+
+@code {
+
+	[Parameter]
+	public float Usage { get; set; }
+
+
+	//protected override async Task OnInitializedAsync()
+		//{
+
+		//}
+}

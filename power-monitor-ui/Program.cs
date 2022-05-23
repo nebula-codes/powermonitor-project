@@ -1,28 +1,29 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using power_monitor_ui.Data;
+using MudBlazor.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddMudServices();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 
-//builder.Services.AddHttpsRedirection(options =>
-//{
-//    options.HttpsPort = 443;
-//});
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.HttpsPort = 443;
+});
 
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("NewPolicy", builder =>
-//     builder.AllowAnyOrigin()
-//                  .AllowAnyMethod()
-//                  .AllowAnyHeader());
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NewPolicy", builder =>
+     builder.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader());
+});
 
 
 var app = builder.Build();
@@ -36,7 +37,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
