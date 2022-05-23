@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  power-monitor-ui:
+    image: ${DOCKER_REGISTRY-}powermonitorui
+    build:
+      context: .
+      dockerfile: power-monitor-ui/Dockerfile
+    networks:
+        - pm-net
+    ports:
+        - "4545:80"
+        - "4646:443"
+
+  power-monitor-worker:
+    image: ${DOCKER_REGISTRY-}powermonitorworker
+    build:
+      context: .
+      dockerfile: power-monitor-worker/Dockerfile
+    depends_on: 
+        - "power-monitor-ui"
+    networks:
+        - pm-net
+
+networks:
+    pm-net:
+        name: pm-net
